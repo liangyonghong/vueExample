@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 穿梭框</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<style>
+*{
+    margin: 0px;
+    padding: 0px;
+}
+ul{
+    list-style-type: none;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.panel-heading{
+    text-align: center;
+}
+.input-group{
+    width: 100%;
+    position: relative;
+    margin-bottom: 12px;
+}
+.input-group .form-control{
+    width: calc(100% - 80px);
+}
+.input-group span{
+    position: absolute;
+    right: 0px;
+    top: 0;
+    z-index: 2;
+}
+.selected{
+    background-color:#337ab7;
+    color: #fff;
+}
+.line-through{
+    text-decoration:line-through;
+}
+.btn-default:hover {
+    /* color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad; */
+}
+.selected:hover{
+    background-color:#337ab7;
+    color: #fff;
+    border-color: #337ab7;
+}
+</style>
+</head>
+<body>
+    <div id="my">
+        <div class="panel panel-info" style="margin: 20px;">
+            <div class="panel-heading">
+                <h1>vue定制学习计划</h1>
+                <div>
+                    <a>共有<span class="badge">{{items.length}}</span>个计划</a>
+                    <a>已完成<span class="badge">{{completed}}</span></a>
+                    <a>未完成<span class="badge">{{items.length - completed}}</span></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="input-group">
+                    <input v-model="input" type="text" class="form-control text-keyword" placeholder="输入小目标后，按回车确认">
+                    <span class="info-group-btn">
+                        <button @click="add()" :disabled="!input" class="btn btn-primary">添加计划</button>
+                    </span>
+                </div>
+            
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-default" :class="cur==1?'selected':''" @click="filterItem(1)">所有计划</a>
+                    <a class="btn btn-default" :class="cur==2?'selected':''"  @click="filterItem(2)">已完成</a>
+                    <a class="btn btn-default" :class="cur==3?'selected':''"  @click="filterItem(3)">未完成</a>
+                </div>
+                <ul class="list-group">
+                    <!-- 不从缓存里取，实时渲染 -->
+                    <li class="list-group-item" v-for="(v,i) in newItems" :key="i">
+                        <input type="checkbox" v-model="v.check">
+                        <span :class="v.check?'line-through':''">{{v.name}}</span>
+                        <a class="badge" @click="del(v)">删除</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+window.onload = function(){
+    new Vue({
+        el:'#my',
+        data:{
+            cur:1,
+            input:"",
+            items:[
+                {name:'学习计划1',check:true},
+                {name:'学习计划2',check:false},
+                {name:'学习计划3',check:false},
+            ],
+            newItems:[]
+        },
+        methods:{
+            add(){
+                //if(!this.input){return} //第二种解决方案，点击无效果或alert提示
+                this.items.unshift({name:this.input,check:false})
+                this.input = ""  //方法一：清除数据
+            },
+            del(v){
+                //this.items.splice(i,1);
+                //删除有的时候可以，有的时候不可以，原因是：每一个里面都有自己的索引，不能删除新数据的索引，应该删除原数据的索引
+                // 解决方法：findIndex
+                var i = this.items.findIndex(function(item){return item.name == v.name})
+                this.items.splice(i,1);
+                // var arr = [10,3,2,4,24];
+                // var a = arr.findIndex(function(item){
+                //     return item == 3
+                // })
+                // console.log(a); //1
+                this.filterItem(this.cur);
+            },
+            filterItem(n){ //筛选数据
+                this.cur = n;
+                // if(n==1){
+                //     // this.newItems = this.items.filter(function(item){return item})
+                //     this.newItems = this.items;
+                // }else if(n==2){
+                //     this.newItems = this.items.filter(function(item){return item.check == true})
+                // }else if(n==3){
+                //     this.newItems = this.items.filter(function(item){return item.check == false})
+                // }
+                switch(n){
+                    case 2:this.newItems = this.items.filter(item=>item.check);
+                        break;
+                    case 3:this.newItems = this.items.filter(item=>!item.check);
+                        break;
+                    default:this.newItems = this.items;
+                }
+            }
+        },
+        mounted(){
+            this.filterItem(this.cur);
+        },
+        computed:{
+            completed(){  //下来学习计算属性可传参数，添加id，对id进行处理 6
+                return this.items.filter(item=>item.check).length
+            }
+        }
+    })
+}
+
+</script>
+</html>

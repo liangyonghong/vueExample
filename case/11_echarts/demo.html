@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <script src="../../../node_modules/echarts/dist/echarts.js"></script> -->
+    <script src="./echarts.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="table">
+            <h3>2019年销售统计</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <td>一月</td>
+                        <td>二月</td>
+                        <td>三月</td>
+                        <td>四月</td>
+                        <td>五月</td>
+                        <td>六月</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12</td>
+                        <td>112</td>
+                        <td>66</td>
+                        <td>888</td>
+                        <td>444</td>
+                        <td>222</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel">
+            <div id="echarts" style="width:100%;height:280px;"></div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        var arr = [[820, 442, 901, 934, 290, 130, 170], [80, 922, 541, 934, 129, 130, 120], [560, 932, 901, 934, 1290, 130, 130], [880, 932, 901, 934, 170, 1330, 120], [666, 932, 901, 934, 1290, 130, 1320]];
+
+        //0-4 随机数 Math.random() 0-1 不包含0和1，0.1*5=0.5 0  0.9*5=4.5 4
+        // arr[parseInt(Math.random()*arr.length)]; 
+
+        option = {
+            backgroundColor: 'blue',
+            color: ['#fff'],
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisLabel: {
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    }
+                }
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'bar'
+            }],
+            grid: { //位置
+                left: '0',
+                right: '0',
+                bottom: '0',
+                containLabel: true //显示轴
+            }
+        };
+        //初始化容器
+        var mychart = echarts.init(document.getElementById('echarts'));
+        //设置数据 setOption()
+        // mychart.setOption(option);
+
+        setInterval(getList, 2000);
+        function getList() {
+            var random = arr[parseInt(Math.random() * arr.length)];
+            option.series[0].data = random;
+            mychart.setOption(option);
+            // str = '';
+            // for(var i=0;i<random.length;i++){
+            //     str+='<td>'+random[i]+'</td>'
+            // };
+            // document.getElementsByTagName('tbody')[0].innerHTML = '<tr>' + str + '</tr>'
+                
+            // console.log(random);
+            document.getElementsByTagName('tbody')[0].innerHTML = `
+            <tr>
+                <td>${random[0]}</td>
+                <td>${random[1]}</td>
+                <td>${random[2]}</td>
+                <td>${random[3]}</td>
+                <td>${random[4]}</td>
+                <td>${random[5]}</td>
+            </tr>
+            `
+            // console.log(random);
+            // document.getElementsByTagName('tbody')[0].innerHTML = 
+            // '<tr>'+
+            //     '<td>'+random[0]+'</td>'+
+            //     '<td>'+random[1]+'</td>'+
+            //     '<td>'+random[2]+'</td>'+
+            //     '<td>'+random[3]+'</td>'+
+            //     '<td>'+random[4]+'</td>'+
+            //     '<td>'+random[5]+'</td>'+
+            // '</tr>'
+           
+        };
+        getList();  //首次加载时可以有数据
+    }
+</script>
+
+</html>

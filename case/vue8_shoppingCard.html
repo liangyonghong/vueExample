@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 穿梭框</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<style>
+*{
+    margin: 0px;
+    padding: 0px;
+}
+ul{
+    list-style-type: none;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+</style>
+</head>
+<body>
+    <div id="my">
+        <div class="panel panel-success" style="margin:20px;">
+            <div class="panel-heading">
+                <h1>vue测试监听查询购物车数量及金额变化</h1>
+            </div>
+            <div class="panel-body">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <a class="btn btn-success">名称搜索</a>
+                    </span>
+                    <input v-model="input" class="form-control" type="text" placeholder="请输入查询内容">
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>图片</th>
+                            <th>商品名称</th>
+                            <th>商品数量</th>
+                            <th>商品单价(元)</th>
+                            <th>商品金额(元)</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,i) in searchData" :key="i">
+                            <td><img style="width:30px;" :src="item.url"></td>
+                            <td>{{item.name}}</td>
+                            <td>
+                                <button :disabled="item.count==0" @click="item.count-=1" style="padding: 0 7px;">-</button>
+                                {{item.count}}
+                                <button @click="item.count+=1" style="padding: 0 7px;">+</button>
+                            </td>
+                            <td>{{item.price | priceFilter(2)}}</td>
+                            <td>{{item.count*item.price | priceFilter(1)}}</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">商品详情</button>
+                            </td>
+                        </tr>
+                        <tr style="text-align: center;">
+                            <td style="height:40px; line-height: 40px;"
+                            colspan="6">{{totalCount}}件商品总计(不含运费)：{{totalPrice | priceFilter(2)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+window.onload = function(){
+    new Vue({
+        el:'#my',
+        data:{
+            input:'',
+            items:[
+                {name:'苹果',price:10,count:1,url:'./img/01.jpg'},
+                {name:'橘子',price:20,count:2,url:'./img/02.jpg'},
+                {name:'香蕉',price:10,count:3,url:'./img/03.jpg'},
+                {name:'火龙果',price:30,count:4,url:'./img/04.jpg'},
+                {name:'苹果1',price:10,count:5,url:'./img/05.jpg'},
+                {name:'苹果2',price:10,count:6,url:'./img/01.jpg'},
+            ],
+        },
+        methods:{
+           
+        },
+        mounted(){
+            
+        },
+        computed:{
+            // totalCount:function(){ //es5
+            //     // 累加
+            //     var n=0;
+            //     this.items.forEach(function(item,index){
+            //         n+=item.count
+            //     })
+            //     return n
+            // },
+            totalCount:function(){  //es6
+               return this.searchData.reduce(function(total,cur){
+                    return total+cur.count
+               },0)
+            },
+            totalPrice:function(){
+                return this.searchData.reduce(function(total,cur){
+                    return total+cur.count*cur.price
+               },0)
+            },
+            // searchData:function(){  //es5
+            //     if(!this.input) return this.items; //解决初始第一次没数据的问题
+            //     return this.items.filter(item=>{  //解决this指向问题
+            //         return item.name.indexOf(this.input) != -1
+            //     })
+            // },
+            searchData:function(){  //es6
+                if(!this.input) return this.items; //解决初始第一次没数据的问题
+                return this.items.filter(item=>{  //解决this指向问题
+                    return item.name.includes(this.input)
+                })
+            }
+        },
+        filters:{//对文本进行格式化的处理
+            priceFilter:function(data,n){
+                return '￥'+data.toFixed(n);
+            },
+
+        },
+       
+    })
+}
+
+</script>
+</html>
+
+<!-- reduce 累加器 -->
+<!-- var arr=[1,2,3,4,5]
+var a = arr.reduce(function(total,cur){ // total初始值 cur 当前元素
+    return total+cur
+},0) //0初始值 -->
+
+<!-- indexOf() 匹配 对应的是字符串
+'hello'.indexOf('f'); //-1
+
+filter() 过滤的方法 数组进行过滤 返回满足条件的数组  -->

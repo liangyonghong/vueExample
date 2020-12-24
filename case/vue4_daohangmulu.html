@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 穿梭框</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="./font_alibaba/iconfont.css">
+<style>
+*{
+    margin: 0px;
+    padding: 0px;
+}
+a{
+    color:#333; 
+}
+ul{
+    list-style-type: none;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.p_item{
+    width: 200px;
+    cursor: pointer;
+}
+.c_item{
+    padding-left: 20px;
+}
+.c_item li{ 
+    height: 24px;
+    line-height: 24px;
+}
+.p_title{
+    width: 100%;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 4px;
+}
+.p_title b{
+    float: right;
+    padding-right: 15px;
+}
+.selected{
+    color: blue;
+    border-bottom: 1px solid blue;
+}
+</style>
+</head>
+<body>
+    <div class="tree" id="my" style="height: 100%;">
+        <ul style="width: 200px;height: 100%;background: #eee;">
+            <li class="p_item" v-for="(item,i) in items" :key="i">
+                <a class="p_title" :class="item.flag ? 'selected' : ''" @click="changeItem(item)">
+                    <i class="iconfont" :class="item.icon"></i>{{item.name}}
+                    <b>^</b>
+                </a>
+                <ul class="c_item" v-show="item.flag">
+                    <li v-for="(v,i) in item.subItems" :key="i">
+                        <a>{{v.name}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+window.onload = function(){
+    new Vue({
+        el:'#my',
+        data:{
+            items:[
+                {name:'一级目录1',icon:'icon-tongzhi',flag:true,
+                 subItems:[
+                    {name:"二级目录1"},{name:"二级目录1"},{name:"二级目录1"}
+                ]},
+                {name:'一级目录2',icon:'icon-shijian',flag:false,
+                 subItems:[
+                    {name:"二级目录2"},{name:"二级目录2"},{name:"二级目录2"}
+                ]},
+                {name:'一级目录3',icon:'icon-tongzhi2',flag:false,
+                 subItems:[
+                    {name:"二级目录3"},{name:"二级目录3"},{name:"二级目录3"}
+                ]},
+            ],
+        },
+        methods:{
+            changeItem:function(item){
+                //item.flag = !item.flag
+                this.items.forEach(function(v,i){
+                    v.flag = false;
+                })
+                item.flag = true;
+            }
+        },
+        mounted(){
+            
+        },
+        computed:{
+           
+        }
+    })
+}
+
+</script>
+</html>

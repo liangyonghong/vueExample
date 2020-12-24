@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>响应式布局</title>
+<!-- <link rel="stylesheet" href="css/side-menu.css"> -->
+<script src="../12/jquery.js"></script>
+<style>
+body{color: #777;}
+body,html{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #777;
+}
+ul{
+    list-style: none;
+}
+#layout{
+    padding-left: 150px;
+    height: 100%;
+}
+#main{
+    height: 100%;
+}
+#menu{
+    margin-left: 0;
+    width: 150px;
+    position: fixed;
+    top:0;
+    left: 0;
+    bottom: 0;
+    background: #333;
+    overflow-y: auto;
+}
+#menu .menu-heading{
+    /* background: #404040; */
+    background-color: #999;
+    color:#fff;
+    display: block;
+    line-height: 36px;
+} 
+.menu-link{
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    background: #404040;
+    width: 1rem;
+    height: auto;
+    padding: 1.3rem;
+    cursor: pointer;
+}
+.menu-link span, .menu-link span:before, .menu-link span:after{
+    background-color: #fff;
+    width: 100%;
+    width: 24px;
+    height: .2em;
+    /* -webkit-transition: all 0.4s; */
+}
+.menu-link span:before,.menu-link span:after{
+    position: absolute;
+    margin-top: -0.5rem;
+    content:" ";
+}
+.menu-link span:after{
+    margin-top: 0.5rem;
+}
+.menu-link span{
+    display: block;
+    margin-top: 0rem;
+}
+.menu-link h1{
+    margin: 0.2rem 0;
+    font-size: 3rem;
+    font-weight: 300;
+    color: #ccc;
+}
+
+/* 头部 */
+.header{
+    margin: 0;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+.header h1{
+    margin: 0.2rem 0;
+    font-size: 3rem;
+    font-weight: 300;
+}
+.header h2{
+    font-weight: 300;
+    color: #ccc;
+}
+
+/* 内容 */
+.content{
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.content>div{
+    font-size: 0;
+    text-align: center;
+}
+.content .img-list{
+    width: 25%;
+    display: inline-block;
+}
+.content .img-responsive{
+    max-width: 100%;
+    height: auto;
+}
+/* 收缩动画 */
+#layout,#menu,.menu-link{
+    transition: all .4s ease;
+}
+@media (min-width: 768px){
+
+}
+/* 在屏幕>=568px，<=768的时候 ,图片显示两个，左侧菜单隐藏*/
+@media (max-width: 768px){
+    #layout{
+        padding-left:0;
+    }
+    .header h1{
+        font-size: 2.5rem;
+    }
+    .content .img-list{
+        width: 50%;
+    }
+    #menu{
+        left:-150px;
+    }
+}
+/* 在屏幕<768px的时候,显示一个图片，左侧菜单隐藏 */
+@media (max-width: 568px){
+    .header h1{
+        font-size: 2rem;
+    }
+    .content .img-list{
+        width: 80%;
+    }
+}
+/* 布局 左侧菜单显示 */
+/* #layout .active{
+    padding-left:150px ;
+}
+#layout .active #menu{
+    left:0px;
+}
+#layout .active .menu-link{
+    left:150px;
+} */
+.active #main{
+    padding-left:150px ;
+}
+.active #menu{
+    left:0px;
+}
+.active .menu-link{
+    left:150px;
+}
+</style>
+</head>
+<body>
+    <!-- 响应式布局：根据不同的设备加载不同的布局，做媒体查询
+    自适应：一套布局适应所有的设备，是响应式的一部分
+    百分比
+    px绝对单位 rem相对单位
+    1rem = ？px html font-size = 14px ，默认为16px -->
+    <h1>www.purecss.cn/grids.html</h1>
+    http://www.purecss.cn/layouts.html#menu
+    <div id="layout">
+        <a class="menu-link">
+            <span></span>
+        </a>
+        <!-- 左侧菜单 -->
+        <div id="menu">
+            <div class="menu-main">
+                <a class="menu-heading" href="#">女装/男装/童装</a>
+                <ul>
+                    <li><a href="#">女装</a></li>
+                    <li><a href="#">男装</a></li>
+                    <li><a href="#">童装</a></li>
+                </ul>
+                <a class="menu-heading" href="#">食品/酒类/生鲜</a>
+                <ul>
+                    <li><a href="#">食品</a></li>
+                    <li><a href="#">酒类</a></li>
+                    <li><a href="#">生鲜</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- 右侧内容 -->
+        <div id="main">
+            <div class="header">
+                <h1>网站标题</h1>
+                <h2>一个专门从事购物的网站</h2>
+            </div>
+            <div class="content">
+                <h3>秒杀</h3>
+                <div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/01.jpg" alt="">
+                    </div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/02.jpg" alt="">
+                    </div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/03.jpg" alt="">
+                    </div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/04.jpg" alt="">
+                    </div>
+                </div>
+                <h3>特价</h3>
+                <div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/04.jpg" alt="">
+                    </div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/03.jpg" alt="">
+                    </div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/02.jpg" alt="">
+                    </div>
+                    <div class="img-list">
+                        <img class="img-responsive" src="./img/01.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+$(function(){
+    $(".menu-link").click(function(){
+        console.log($('#layout').hasClass('active'));
+        if($('#layout').hasClass('active')){
+            $("#layout").removeClass('active')
+        }else{
+            $("#layout").addClass('active')
+        }
+    })
+})
+</script>
+</body>
+</html>

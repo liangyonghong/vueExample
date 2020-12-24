@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 穿梭框</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<style>
+*{
+    margin: 0px;
+    padding: 0px;
+}
+ul{
+    list-style-type: none;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.panel-height{
+    height: 350px;
+}
+.panel-body li{
+    float: left;
+    border: 1px solid #ccc;
+    padding: 4px 20px;
+    border-radius: 4px;
+    margin: 5px;
+    position: relative;
+    cursor: pointer;
+}
+.del{
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    color: red;
+    top: 0px;
+    right: -5px;
+    /* display: none; */
+}
+.selected{
+    color:red;
+    background-color: #dff0d8;
+}
+</style>
+</head>
+<body>
+    <div id="my">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">省份({{leftData.length}})/当前选中({{rightData.length}})</h3>
+                        </div>
+                        <div class="panel-body panel-height">
+                            <ul>
+                                <li :class="v.flag?'selected':''" v-for="(v,i) in leftData" :key="i" @click="add(v)">{{v.name}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">已选择的省份({{rightData.length}})</h3>
+                            </div>
+                            <div class="panel-body panel-height">
+                                <ul>
+                                    <li  v-for="(v,i) in rightData" :key="i"  @mouseover="flag=i" @mouseout="flag='hide'">{{v.name}}
+                                        <span @click="del(v,i)" v-show="flag==i" class="del">x</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+window.onload = function(){
+    new Vue({
+        el:'#my',
+        data:{
+            leftData:[
+                {name:'北京市1',id:1,flag:false},
+                {name:'北京市2',id:2,flag:false},
+                {name:'北京市3',id:3,flag:false},
+                {name:'北京市4',id:4,flag:false},
+                {name:'北京市5',id:5,flag:false},
+                {name:'北京市6',id:6,flag:false},
+                {name:'北京市7',id:7,flag:false},
+                {name:'北京市8',id:8,flag:false},
+                {name:'北京市9',id:9,flag:false},
+                {name:'北京市10',id:10,flag:false},
+            ],
+            rightData:[],
+            flag:'show',
+        },
+        methods:{
+           add:function(item){
+               item.flag = true;
+               //去重 es5
+               //    for(var i = 0;i<this.rightData.length;i++){
+               //      if(item.id == this.rightData[i].id) return
+               //    }
+
+               //去重 es5 filter()
+                // var a= this.rightData.filter(function(v){
+                //     return v.id == item.id
+                // })
+                // if(a.length>0) return
+
+                //去重 es6 set 只针对数组，不针对数组对象
+                // var arr = [1,2,3,4,1,2];
+                // var s = [...new Set(arr)];
+                // [...s]  Array.from() set数据转换
+                this.rightData.push(item);
+                this.rightData = [...new Set(this.rightData)];
+           },
+           del:function(v,i){
+                this.rightData.splice(i,1);
+                this.leftData.forEach(function(item){
+                    if(item.id == v.id){ //左侧的id值等于传过来要删的id的值
+                        //v.flag = false //当前这个值的flag设置为false
+                        item.flag = false; //左侧的flag值设置为false
+                    }
+                })
+           }
+        },
+        mounted(){
+            
+        },
+        computed:{
+           
+        }
+    })
+}
+
+</script>
+</html>

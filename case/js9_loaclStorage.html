@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>localStorage</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <style>
+    *{
+        margin: 0px;
+        padding: 0px;
+        font-family: 'Microsoft Yahei','sans-serif';
+    }
+    .container{
+        margin-top: 20px;
+    }
+    .btn{
+        padding: 5px 10px;
+    }
+    .del{
+        cursor: pointer;
+        background: #d9534f;
+        border: none;
+    }
+    </style>
+</head>
+<body>
+    table鼠标经过显示全部
+    实现一个留言板功能
+    localStorage sessionStorage
+    本地缓存是纯浏览器行为
+    <div class="container">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-1 control-label">昵称：</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control name" placeholder="请输入昵称">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label">留言：</label>
+                <div class="col-sm-11">
+                    <textarea type="text" class="form-control message" rows="5" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+            <div class="form-group btn-box">
+                <div class="col-sm-offset-1 col-sm-11">
+                    <button type="submit" class="btn btn-success submit">提交留言</button>
+                    <button class="btn btn-primary viewMes">查看留言</button>
+                    <button class="btn btn-danger deleteAll">删除留言</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">留言列表</div>
+            <div class="panel-body">
+                <ul class="list-group messageList">
+                    <li class="list-group-item">张三
+                        <span>说：</span>大家好！
+                        <button class="badge delbtn del">删除</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!-- <script src="../12/jquery.js"></script>    -->
+<script src="https://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+    //提交按钮
+    $(".btn-box .submit").click(function(){
+        var _name = $(".name").val();
+        var _message = $(".message").val();
+        if(_name=='' || _message==''){
+            alert('请输入信息');
+        }else{
+            localStorage.setItem(_name,_message);
+            $('.name,.message').val('');
+            listshow();
+        }
+    })
+    //列表展示
+    function listshow(){
+        var str = '';
+        for(var i=0;i<localStorage.length;i++){
+            var key = localStorage.key(i);
+            console.log(key);
+            var value = localStorage.getItem(key);
+            str+=`<li class="list-group-item" data-name="${key}">${key}
+                    <span>说：</span>${value}
+                    <button class="badge delbtn del">删除</button>
+                </li>`
+        }
+        $(".messageList").html(str);
+    }
+    //查看留言
+    $('.btn-box .viewMes').click(function(){
+        listshow()
+    })
+    //删除留言
+    $('.btn-box .deleteAll').click(function(){
+        localStorage.clear();
+        $(".messageList").html("所有数据删除")
+    })
+    //删除单个留言 注意未来元素 live bind on 
+    // $('.messageList .del').click(function(){
+    //     var _name = $(this).parent().attr("data-name");
+    //     localStorage.removeItem(_name);
+    //     $(this).parent().remove();
+    // })
+    $('.messageList').on('click','.del',function(){
+        var _name = $(this).parent().attr("data-name");
+        localStorage.removeItem(_name);
+        $(this).parent().remove();
+    })
+})
+</script>
+</body>
+</html>
