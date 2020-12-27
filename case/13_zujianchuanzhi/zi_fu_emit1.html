@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 父传子用$attrs</title>
+</head>
+
+<body>
+    <div id="my">
+        <!-- 父传子用$attrs ,在父组件中维护数据-->
+        <Children v-model="msg"  @zifu-func="zifuFunc"></Children>
+        <!-- <Children :value="msg" @input="msg=$event" @zifu-func="zifuFunc"></Children> -->
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.component('Children', {
+        template: `<div>
+            <input type="text" :value="value" @input="onInput" v-on:keydown.enter="add">
+            <button @click = "add">新增</button>
+        </div>`,
+        props:['value'], //接收父组件传递的value，不需要额外维护
+        methods:{
+            add(){
+                //派发事件通知父组件更新,实现组件的无状态化
+                this.$emit('zifu-func')
+            },
+            onInput(e){
+                this.$emit('input',e.target.value)
+            }
+        }
+    })
+
+    window.onload = function () {
+        new Vue({
+            el: '#my',
+            data: {
+                msg:'lyh111111'
+            },
+            methods: {
+                zifuFunc(){
+                    console.log(this.msg)
+                }
+            },
+            mounted() {
+
+            },
+            computed: {
+
+            }
+        })
+    }
+
+</script>
+
+</html>

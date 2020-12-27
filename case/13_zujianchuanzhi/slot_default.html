@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue slot</title>
+</head>
+
+<body>
+    <div id="my">
+        <!-- slot -->
+        <Children>
+            <template v-slot:default>abcd</template>
+            <template v-slot:content="slotProps">具名插槽{{slotProps.xx}}</template>
+        </Children>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.component('Children', {
+        template: `<div>
+            <p><slot></slot></p>
+            <p><slot name="content" :xx="xx"></slot></p>
+        </div>`,
+        data(){
+            return{
+            xx:'xxxxxxx........',
+            }
+        },
+    })
+
+    window.onload = function () {
+        new Vue({
+            el: '#my',
+            data: {
+
+            },
+            methods: {
+
+            },
+            mounted() {
+
+            },
+            computed: {
+
+            }
+        })
+    }
+
+</script>
+
+</html>
