@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 父传子用$attrs</title>
+</head>
+
+<body>
+    <div id="my">
+        <!-- 任意两个组件 bus -->
+        {{count}}<br>
+        <Children1 :count="count"></Children1>
+        <Children2 :count="count"></Children2>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+var busVM = new Vue();
+    
+    Vue.component('Children1', {
+        template: `<div>
+            <button @click="setCount">+</button>
+        </div>`,
+        props:['count'],
+        methods:{
+            setCount:function(){
+                busVM.$emit('changeEvents',this.count+1)
+            }
+        }
+    })
+
+    Vue.component('Children2', {
+        template: `<div>
+            <button @click="setCount">+</button>
+        </div>`,
+        props:['count'],
+        methods:{
+            setCount:function(){
+                busVM.$emit('changeEvents',this.count+1)
+            }
+        }
+    })
+
+    window.onload = function () {
+        new Vue({
+            el: '#my',
+            data(){
+                return{
+                    count:0,
+                }
+            },
+            methods: {
+
+            },
+            mounted:function(){
+                busVM.$on('changeEvents',function(num){
+                    this.count=num;
+                }.bind(this));
+            },
+            computed: {
+
+            }
+        })
+    }
+
+</script>
+
+</html>
