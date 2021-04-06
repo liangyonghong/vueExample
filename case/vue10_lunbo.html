@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 轮播图+数据驱动</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<style>
+*{
+    margin: 0px;
+    padding: 0px;
+}
+ul{
+    list-style-type: none;
+}
+body{
+    font-size: 14px;
+    background: #fff;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+body,html{
+    max-width: 720px;
+    height: 100%;
+    margin: 0 auto;
+}
+.index-content .banner{
+    position: relative;
+}
+.index-content .banner .banner-circle{
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    color: #fff;
+}
+.index-content .banner .banner-circle li{
+    display: inline-block;
+    background: rgba(0,0,0,.3);
+    border-radius: 50%;
+    padding: 5px;
+    margin: 2px;
+}
+.index-content .banner .banner-circle ul{
+    text-align: center;
+}
+.index-content .banner .banner-circle .selected{
+    background: rgba(0,0,0,.8);
+}
+.index-content  .banner img{
+    width:100%;
+    margin: 0;
+    padding: 0;
+}
+
+.index-content  .index-category{
+    margin-top: 5%;
+}
+.index-content  .index-category .category{
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+.index-content  .index-category .category .iconfont{
+    width: 100px;
+    height: 100px;
+    font-size: 40px;
+    display: inline-block;
+    padding: 10%;
+    border-radius: 50%;
+    color: #fff;
+    border:3px solid #f9f9f9;
+    box-shadow: 0px 0px 6px rgba(0,0,0,.5);
+}
+.index-content  .index-category .category .iconfont{
+    background: #92d85c;
+}
+/* .index-content  .index-category .category:nth-child(1) .iconfont{
+    background: rgb(106, 34, 173);
+}
+.index-content  .index-category .category:nth-child(2) .iconfont{
+    background: #f95730;
+} */
+.index-content  .index-category .category label{
+    display: block;
+    padding: 10% 0;
+    color:#999;
+}
+</style>
+</head>
+<body>
+    <div id="my" class="index-content">
+        <div class="banner">
+            <!-- <img src="./img/01.jpg"/> -->
+            <img v-for="(img,i) in items" :src="img" v-show="i==n"/>
+            <div class="banner-circle">
+                <ul>
+                    <!-- <li :class="i==n ? 'selected' : '' " v-for="(img,i) in items"></li> -->
+                    <li :class="{'selected':i==n}" v-for="(img,i) in items"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="index-category">
+            <div class="category" v-for="v in lists">
+                <i class="iconfont" :class="v.icon" :style="{background:v.color}">+</i>
+                <label>{{v.title}}</label>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+window.onload = function(){
+    new Vue({
+        el:'#my',
+        data:{
+            arr:["111","222","333","444"],
+            lists:[{title:"111",icon:"111",color:"#92d85c"},
+                   {title:"222",icon:"222",color:"#f95730"},
+                   {title:"333",icon:"333",color:"#92d85c"},
+                   {title:"444",icon:"444",color:"#f95730"},],
+            items:['img/01.jpg','img/02.jpg','img/03.jpg','img/04.jpg','img/05.jpg',],
+            n:0, //展示数据
+        },
+        methods:{
+           play:function(){
+               setInterval(this.autoPlay,2000)
+           },
+           autoPlay:function(){
+               this.n++;
+                if(this.n == this.items.length){
+                    this.n = 0;
+                }
+           }
+        },
+        mounted(){
+            // this.play();
+        },
+        computed:{
+           
+        }
+    })
+}
+
+</script>
+</html>

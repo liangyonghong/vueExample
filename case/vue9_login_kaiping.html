@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 开屏广告+校验+数据交互</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<style>
+*{
+    margin: 0px;
+    padding: 0px;
+}
+ul{
+    list-style-type: none;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+</style>
+</head>
+<body>
+    <div id="my">
+        <!-- 开屏广告 -->
+        <div class="count-down" v-if="adBack">
+            <span class="jump" @click="jump()">点击跳转<b>{{n}}</b></span>
+        </div>
+        <!-- 主体 -->
+        <div class="login-content" v-else>
+            <h1 class="login-title">欢迎登录</h1>
+            <div class="panel">
+                <input type="text" class="mobile btn" v-model="mobile" placeholder="手机号码"
+                @focus=""
+                @blur="" />
+                <p class="error-tip" v-show="!mobile">输入内容不符合</p>
+            </div>
+            <div class="panel">
+                <input type="password" class="password btn" v-model="password" placeholder="登录密码" />
+                <p class="error-tip" v-show="!password">输入内容不符合</p>
+            </div>
+            <div class="panel">
+                <a class="btn-login btn login" @click="login()">登录</a>
+            </div>
+            <div class="panel">
+                <a class="text">我要注册</a>
+                <a class="text">忘记密码</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<script>
+window.onload = function(){
+    new Vue({
+        el:'#my',
+        data:{
+            mobile:'',
+            password:'',
+            adBack:true,
+            n:5,
+            timer:null,
+        },
+        methods:{
+           play:function(){
+                this.timer = setInterval(this.autoPlay,1000)
+           },
+           autoPlay:function(){
+            this.n--;
+            if(this.n == 0){
+                this.adBack = false;
+                clearInterval(this.timer);
+            }
+           },
+           jump:function(){
+            this.adBack = false;
+            clearInterval(this.timer);
+           },
+           login:function(){
+            var data = {
+                mobile:this.mobile,
+                password:this.password
+            }   
+            if(this.mobile =='' || this.password == ''){
+                alert('请输入信息')
+            }else{
+                axios({
+                    methods:'post',
+                    url:'',
+                    data:data
+                }).then(function(res){
+                    console.log(res);
+                    if(res.code == '200'){
+                        //页面跳转 路由
+                    }
+                }).catch(function(error){
+                    console.log(error)
+                })
+            }
+           }
+        },
+        mounted(){
+            this.play();
+        },
+        computed:{
+           
+        }
+    })
+}
+
+</script>
+</html>
